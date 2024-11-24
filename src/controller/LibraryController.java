@@ -5,10 +5,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryController {
+    private static LibraryController instance;
     private final List<Book> books;
 
-    public LibraryController() {
+    private LibraryController() {
         books = new ArrayList<>();
+    }
+
+    public static LibraryController getInstance() {
+        if (instance == null) {
+            instance = new LibraryController();
+        }
+        return instance;
     }
 
     public void addBook(Book book) {
