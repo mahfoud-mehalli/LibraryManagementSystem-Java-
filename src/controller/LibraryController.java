@@ -5,10 +5,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LibraryController {
+    private static LibraryController instance; // Static instance of the Singleton
     private final List<Book> books;
 
-    public LibraryController() {
+    // Private constructor to prevent instantiation
+    private LibraryController() {
         books = new ArrayList<>();
+    }
+
+    // Public method to get the single instance
+    public static LibraryController getInstance() {
+        if (instance == null) { // Lazy initialization
+            instance = new LibraryController();
+        }
+        return instance;
     }
 
     public void addBook(Book book) {
