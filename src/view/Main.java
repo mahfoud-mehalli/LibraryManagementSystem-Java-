@@ -7,7 +7,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        LibraryController library = LibraryController.getInstance();
+        LibraryController library = new LibraryController();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
