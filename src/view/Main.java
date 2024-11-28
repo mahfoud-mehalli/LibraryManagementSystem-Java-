@@ -9,7 +9,8 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         LibraryController library = LibraryController.getInstance();
-        FileAdapter fileAdapter = new FileAdapter(); // Create an instance of the Adapter
+        new ConsoleView(library); // Attach observer
+        FileAdapter fileAdapter = new FileAdapter();
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
@@ -35,7 +36,6 @@ public class Main {
                     System.out.print("Enter year: ");
                     int year = scanner.nextInt();
                     library.addBook(new Book(title, author, year));
-                    System.out.println("Book added successfully!");
                     break;
                 case 2:
                     System.out.println("Books in library:");
@@ -45,7 +45,6 @@ public class Main {
                     System.out.print("Enter title to remove: ");
                     String removeTitle = scanner.nextLine();
                     library.removeBook(removeTitle);
-                    System.out.println("Book removed (if it existed).");
                     break;
                 case 4:
                     System.out.print("Enter title to find: ");
@@ -53,13 +52,12 @@ public class Main {
                     Book foundBook = library.findBook(findTitle);
                     System.out.println(foundBook != null ? foundBook : "Book not found.");
                     break;
-                case 5: // Import books from file
+                case 5:
                     System.out.print("Enter file path to import: ");
                     String importPath = scanner.nextLine();
                     library.getBooks().addAll(fileAdapter.importBooks(importPath));
-                    System.out.println("Books imported successfully!");
                     break;
-                case 6: // Export books to file
+                case 6:
                     System.out.print("Enter file path to export: ");
                     String exportPath = scanner.nextLine();
                     fileAdapter.exportBooks(exportPath, library.getBooks());

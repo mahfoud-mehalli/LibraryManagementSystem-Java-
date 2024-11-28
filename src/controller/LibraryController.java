@@ -1,21 +1,24 @@
 package controller;
 
 import model.Book;
+import observer.Observer;
+import observer.Subject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class LibraryController {
-    private static LibraryController instance; // Static instance of the Singleton
+public class LibraryController implements Subject {
+    private static LibraryController instance;
     private final List<Book> books;
+    private final List<Observer> observers;
 
-    // Private constructor to prevent instantiation
     private LibraryController() {
         books = new ArrayList<>();
+        observers = new ArrayList<>();
     }
 
-    // Public method to get the single instance
     public static LibraryController getInstance() {
-        if (instance == null) { // Lazy initialization
+        if (instance == null) {
             instance = new LibraryController();
         }
         return instance;
@@ -23,14 +26,12 @@ public class LibraryController {
 
     public void addBook(Book book) {
         books.add(book);
-    }
-
-    public List<Book> getBooks() {
-        return books;
+        notifyObservers(); // Notify when a book is added
     }
 
     public void removeBook(String title) {
         books.removeIf(book -> book.getTitle().equalsIgnoreCase(title));
+        notifyObservers(); // Notify when a book is removed
     }
 
     public Book findBook(String title) {
@@ -38,5 +39,27 @@ public class LibraryController {
                 .filter(book -> book.getTitle().equalsIgnoreCase(title))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    // Subject implementation
+    @Override
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+//    @Override
+//    public void removeObserver(Observer observer) {
+//        observers.remove(observer);
+//    }
+
+    @Override
+    public void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update();
+        }
     }
 }
