@@ -1,5 +1,6 @@
 package view;
 
+import adapter.FileAdapter;
 import controller.LibraryController;
 import model.Book;
 
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         LibraryController library = LibraryController.getInstance();
+        FileAdapter fileAdapter = new FileAdapter(); // Create an instance of the Adapter
         Scanner scanner = new Scanner(System.in);
         boolean running = true;
 
@@ -17,7 +19,9 @@ public class Main {
             System.out.println("2. View Books");
             System.out.println("3. Remove Book");
             System.out.println("4. Find Book");
-            System.out.println("5. Exit");
+            System.out.println("5. Import Books");
+            System.out.println("6. Export Books");
+            System.out.println("7. Exit");
             System.out.print("Choose an option: ");
             int choice = scanner.nextInt();
             scanner.nextLine(); // Consume newline
@@ -49,7 +53,18 @@ public class Main {
                     Book foundBook = library.findBook(findTitle);
                     System.out.println(foundBook != null ? foundBook : "Book not found.");
                     break;
-                case 5:
+                case 5: // Import books from file
+                    System.out.print("Enter file path to import: ");
+                    String importPath = scanner.nextLine();
+                    library.getBooks().addAll(fileAdapter.importBooks(importPath));
+                    System.out.println("Books imported successfully!");
+                    break;
+                case 6: // Export books to file
+                    System.out.print("Enter file path to export: ");
+                    String exportPath = scanner.nextLine();
+                    fileAdapter.exportBooks(exportPath, library.getBooks());
+                    break;
+                case 7:
                     running = false;
                     System.out.println("Goodbye!");
                     break;
